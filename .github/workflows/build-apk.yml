@@ -1,0 +1,38 @@
+name: Build APK Without Manifest
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Build Android App with Webview
+        uses: Android-Actions/setup-android@v3
+
+      - name: Generate APK with Cordova CLI
+        run: |
+          npm install -g cordova
+          cordova create myApp com.cinematch.app CineMatch
+          cd myApp
+          cordova platform add android
+          rm -rf www/*
+          cp ../index.html www/index.html
+          cordova build android --release
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: CineMatch-APK
+          path: myApp/platforms/android/app/build/outputs/apk/release/*.apk
