@@ -1,0 +1,11 @@
+{
+  "background_color": "#ffffff",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "CineMatch",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "CineMatch",
+  "start_url": "/",
+  "theme_color": "#ffffff"
+}
