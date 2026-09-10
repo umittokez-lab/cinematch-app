@@ -29,7 +29,7 @@ jobs:
           cordova platform add android
           rm -rf www/*
           cp ../index.html www/index.html
-          cordova build android --release
+          cordova build android --debug
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
