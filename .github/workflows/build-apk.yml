@@ -35,4 +35,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: CineMatch-APK
-          path: myApp/platforms/android/app/build/outputs/apk/release/*.apk
+          path: myApp/platforms/android/app/build/outputs/apk/debug/*.apk
