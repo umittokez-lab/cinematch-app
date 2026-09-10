@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>🎬 CineMatch</title>
+
+    <!-- 🎨 Özel Uygulama İkonu ve Amblemi -->
+    <link rel="icon" type="image/png" sizes="512x512" href="https://cdn-icons-png.flaticon.com/512/3172/3172520.png">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3172/3172520.png">
+
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
@@ -132,7 +137,7 @@
         🤖 <span id="aiMessageText"></span>
     </div>
 
-    <div id="loading" class="loading-text">✨ Sizin için filmleri seçiyorum. Türkiye'deki doğrulanmış platformlar kontrol ediliyor...</div>
+    <div id="loading" class="loading-text">✨ Sizin için filmleri seçiyorum...</div>
 
     <div id="moviesList" class="movies-list"></div>
 
@@ -277,7 +282,6 @@ function uniqueProviders(providers) {
     return Array.from(map.values());
 }
 
-// 🔧 PLATFORM ARAMA ESNEKLEŞTİRİLDİ (Türkiye'de aktif yayın olmasa bile filmi elemez)
 function chooseProviders(turkeyProviders) {
     if (!turkeyProviders) {
         return { type: "Dijital Yayın Yok", providers: [{ provider_name: "Sinema / Dijitalde Yok" }], link: null };
