@@ -29,6 +29,13 @@ jobs:
           cordova platform add android
           rm -rf www/*
           cp ../index.html www/index.html
+          
+          # Yüklediğin filmikon.jpg dosyasını Cordova ikonu olarak ayarlar
+          if [ -f "../filmikon.jpg" ]; then
+            cp ../filmikon.jpg www/filmikon.jpg
+            sed -i '/<\/widget>/i \    <icon src="www/filmikon.jpg" />' config.xml
+          fi
+
           cordova build android --debug
 
       - name: Upload APK Artifact
