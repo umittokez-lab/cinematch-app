@@ -28,27 +28,23 @@ jobs:
           cd myApp
           cordova platform add android
           
-          # Splashscreen eklentisini ekle
-          cordova plugin add cordova-plugin-splashscreen
-          
           rm -rf www/*
           cp ../index.html www/index.html
           
-          # 1080.gif dosyasını kopyala
+          # 1080.gif dosyasını www klasörüne kopyala
           if [ -f "../1080.gif" ]; then
             cp ../1080.gif www/1080.gif
           fi
 
-          # Yüklediğin filmikon.jpg dosyasını Cordova ikonu olarak ayarlar
+          # Icon Ayarları
           if [ -f "../filmikon.jpg" ]; then
             cp ../filmikon.jpg www/filmikon.jpg
             sed -i '/<\/widget>/i \    <icon src="www/filmikon.jpg" />' config.xml
           fi
 
-          # Splash Screen Yapılandırmasını config.xml dosyasına ekle
-          sed -i '/<\/widget>/i \    <preference name="SplashScreen" value="www/1080.gif" />' config.xml
-          sed -i '/<\/widget>/i \    <preference name="AutoHideSplashScreen" value="true" />' config.xml
-          sed -i '/<\/widget>/i \    <preference name="SplashScreenDelay" value="3000" />' config.xml
+          # Cordova Varsayılan Robot/Splash Görsellerini Doğrudan GIF ile Değiştirme
+          find platforms/android/app/src/main/res/ -name "ic_cdv_splashscreen.png" -exec cp ../1080.gif {} \; || true
+          find platforms/android/app/src/main/res/ -name "screen.png" -exec cp ../1080.gif {} \; || true
 
           cordova build android --debug
 
