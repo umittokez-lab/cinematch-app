@@ -26,25 +26,34 @@ jobs:
           npm install -g cordova
           cordova create myApp com.cinematch.app CineMatch
           cd myApp
-          cordova platform add android
+          cordova platform add android@12.0.0
           
           rm -rf www/*
           cp ../index.html www/index.html
           
-          # 1080.gif dosyasını kopyala
+          # 1080.gif dosyasını www klasörüne kopyala
           if [ -f "../1080.gif" ]; then
             cp ../1080.gif www/1080.gif
           fi
 
-          # filmikon.jpg dosyasını ikon yap
+          # Icon Ayarları
           if [ -f "../filmikon.jpg" ]; then
             cp ../filmikon.jpg www/filmikon.jpg
             sed -i '/<\/widget>/i \    <icon src="www/filmikon.jpg" />' config.xml
           fi
 
-          # Cordova'nın dahili robot görsellerini 1080.gif ile ez
-          find platforms/android/ -name "ic_cdv_splashscreen.png" -exec cp ../1080.gif {} \; || true
-          find platforms/android/ -name "screen.png" -exec cp ../1080.gif {} \; || true
+          # Android Native Splash / Robot Resmini Kökten Kaldırma Ayarları
+          sed -i '/<\/widget>/i \    <preference name="SplashScreen" value="none" />' config.xml
+          sed -i '/<\/widget>/i \    <preference name="AutoHideSplashScreen" value="true" />' config.xml
+          sed -i '/<\/widget>/i \    <preference name="FadeSplashScreen" value="false" />' config.xml
+          sed -i '/<\/widget>/i \    <preference name="ShowSplashScreenSpinner" value="false" />' config.xml
+          sed -i '/<\/widget>/i \    <preference name="AndroidWindowSplashScreenAnimatedIcon" value="www/1080.gif" />' config.xml
+          sed -i '/<\/widget>/i \    <preference name="AndroidWindowSplashScreenBackground" value="#0a0a12" />' config.xml
+
+          # Res klasörlerindeki varsayılan robot vektör ve png görsellerini sil/temizle
+          find platforms/android/app/src/main/res/ -name "ic_cdv_splashscreen.xml" -delete || true
+          find platforms/android/app/src/main/res/ -name "ic_cdv_splashscreen.png" -delete || true
+          find platforms/android/app/src/main/res/ -name "screen.png" -delete || true
 
           cordova build android --debug
 
