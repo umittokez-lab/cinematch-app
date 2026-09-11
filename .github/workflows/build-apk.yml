@@ -27,14 +27,28 @@ jobs:
           cordova create myApp com.cinematch.app CineMatch
           cd myApp
           cordova platform add android
+          
+          # Splashscreen eklentisini ekle
+          cordova plugin add cordova-plugin-splashscreen
+          
           rm -rf www/*
           cp ../index.html www/index.html
           
+          # 1080.gif dosyasını kopyala
+          if [ -f "../1080.gif" ]; then
+            cp ../1080.gif www/1080.gif
+          fi
+
           # Yüklediğin filmikon.jpg dosyasını Cordova ikonu olarak ayarlar
           if [ -f "../filmikon.jpg" ]; then
             cp ../filmikon.jpg www/filmikon.jpg
             sed -i '/<\/widget>/i \    <icon src="www/filmikon.jpg" />' config.xml
           fi
+
+          # Splash Screen Yapılandırmasını config.xml dosyasına ekle
+          sed -i '/<\/widget>/i \    <preference name="SplashScreen" value="www/1080.gif" />' config.xml
+          sed -i '/<\/widget>/i \    <preference name="AutoHideSplashScreen" value="true" />' config.xml
+          sed -i '/<\/widget>/i \    <preference name="SplashScreenDelay" value="3000" />' config.xml
 
           cordova build android --debug
 
