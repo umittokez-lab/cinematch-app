@@ -21,6 +21,12 @@ jobs:
       - name: Build Android App with Webview
         uses: Android-Actions/setup-android@v3
 
+      # Gradle sürümünü Cordova ile uyumlu sürüme sabitleme (Gradle 9 uyumsuzluğunu çözer)
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.7'
+
       - name: Generate APK with Cordova CLI
         run: |
           npm install -g cordova
@@ -36,23 +42,19 @@ jobs:
             cp ../1080.gif www/1080.gif
           fi
 
-          # Icon Ayarları
+          # Uygulama ikonunu ayarla
           if [ -f "../filmikon.jpg" ]; then
             cp ../filmikon.jpg www/filmikon.jpg
             sed -i '/<\/widget>/i \    <icon src="www/filmikon.jpg" />' config.xml
           fi
 
-          # Android Native Splash / Robot Resmini Kökten Kaldırma Ayarları
+          # Cordova Splash Screen ve Arka Plan Rengi Ayarları
           sed -i '/<\/widget>/i \    <preference name="SplashScreen" value="none" />' config.xml
           sed -i '/<\/widget>/i \    <preference name="AutoHideSplashScreen" value="true" />' config.xml
-          sed -i '/<\/widget>/i \    <preference name="FadeSplashScreen" value="false" />' config.xml
-          sed -i '/<\/widget>/i \    <preference name="ShowSplashScreenSpinner" value="false" />' config.xml
-          sed -i '/<\/widget>/i \    <preference name="AndroidWindowSplashScreenAnimatedIcon" value="www/1080.gif" />' config.xml
           sed -i '/<\/widget>/i \    <preference name="AndroidWindowSplashScreenBackground" value="#0a0a12" />' config.xml
 
-          # Res klasörlerindeki varsayılan robot vektör ve png görsellerini sil/temizle
-          find platforms/android/app/src/main/res/ -name "ic_cdv_splashscreen.xml" -delete || true
-          find platforms/android/app/src/main/res/ -name "ic_cdv_splashscreen.png" -delete || true
+          # Robot ve varsayılan splash ikonlarını platform klasörlerinden temizle
+          find platforms/android/app/src/main/res/ -name "ic_cdv_splashscreen.*" -delete || true
           find platforms/android/app/src/main/res/ -name "screen.png" -delete || true
 
           cordova build android --debug
