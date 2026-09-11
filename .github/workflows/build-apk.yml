@@ -21,11 +21,17 @@ jobs:
       - name: Build Android App with Webview
         uses: Android-Actions/setup-android@v3
 
-      # Gradle sürümünü Cordova ile uyumlu sürüme sabitleme (Gradle 9 uyumsuzluğunu çözer)
+      # Gradle sürümünü sabitleme
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
         with:
           gradle-version: '8.7'
+
+      # Eksik olan Android Build-Tools 33.0.2 paketini yükleme
+      - name: Install Android Build Tools
+        run: |
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "build-tools;33.0.2" "platforms;android-33"
 
       - name: Generate APK with Cordova CLI
         run: |
@@ -53,7 +59,7 @@ jobs:
           sed -i '/<\/widget>/i \    <preference name="AutoHideSplashScreen" value="true" />' config.xml
           sed -i '/<\/widget>/i \    <preference name="AndroidWindowSplashScreenBackground" value="#0a0a12" />' config.xml
 
-          # Robot ve varsayılan splash ikonlarını platform klasörlerinden temizle
+          # Robot ve varsayılan splash ikonlarını temizle
           find platforms/android/app/src/main/res/ -name "ic_cdv_splashscreen.*" -delete || true
           find platforms/android/app/src/main/res/ -name "screen.png" -delete || true
 
